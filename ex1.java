@@ -1,37 +1,42 @@
-/**
- * @(#)ex1.java
- *
- *
- * @author 
- * @version 1.00 2025/4/17
- */
 
-import java.util.Scanner;
 
 public class ex1 {
-
+    public static double somme(double[] tab) {
+        double total = 0.0;
+        for (double num : tab) {
+            total += num;
+        }
+        return total;
+    }
+    
+    public static void incre(double[] tab, double valeur) {
+        for (int i = 0; i < tab.length; i++) {
+            tab[i] += valeur;
+        }
+    }
+    
+    public static void afficher(double[] tab) {
+        System.out.print("[");
+        for (int i = 0; i < tab.length; i++) {
+            System.out.print(tab[i]);
+            if (i < tab.length - 1) System.out.print(", ");
+        }
+        System.out.println("]");
+    }
+    
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int n = lectureN(scanner);
-        int nbChiffres = compter(n);
-        System.out.println("Le nombre " + n + " contient " + nbChiffres + " chiffre(s).");
-        scanner.close();
-    }
+        double[] donnees = {1.1, 2.2, 3.3, 4.4};
+     
+        System.out.println("--- Démonstration TableauUtils ---");
+        System.out.print("Tableau initial : ");
+        afficher(donnees);
 
-    public static int lectureN(Scanner scanner) {
-        int n;
-        do {
-            System.out.print("Entrez un entier strictement positif : ");
-            n = scanner.nextInt();
-            if (n <= 0) {
-                System.out.println("Erreur : le nombre doit être strictement positif.");
-            }
-        } while (n <= 0);
-        return n;
-    }
-
-    public static int compter(int n) {
-        if (n == 0) return 1;
-        return String.valueOf(n).length();
+        System.out.println("Somme : " + somme(donnees));
+   
+        incre(donnees, 1.0);
+        System.out.print("Après +1.0 : ");
+        afficher(donnees);
+     
+        System.out.println("Nouvelle somme : " + somme(donnees));
     }
 }

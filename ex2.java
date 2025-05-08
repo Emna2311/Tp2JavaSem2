@@ -1,80 +1,85 @@
-/**
- * @(#)ex2.java
- *
- *
- * @author 
- * @version 1.00 2025/4/17
- */
-
-import java.util.Scanner;
 
 public class ex2 {
+    private final double[] composantes;  
 
-    public static double addition(double a, double b) {
-        return a + b;
+    public Vecteur(double[] valeurs) {
+        this.composantes = valeurs.clone();  
     }
 
-    public static double soustraction(double a, double b) {
-        return a - b;
-    }
-
-    public static double multiplication(double a, double b) {
-        return a * b;
-    }
-
-    public static double division(double a, double b) {
-        if (b == 0) {
-            System.out.println("Erreur : Division par zéro !");
-            return Double.NaN;
-            b= scanner.nextDouble();
+    public double produitScalaire(Vecteur autre) {
+        if (autre == null || autre.composantes.length != this.composantes.length) {
+            throw new IllegalArgumentException("Vecteurs de tailles différentes");
         }
-        return a / b;
+        
+        double resultat = 0.0;
+        for (int i = 0; i < composantes.length; i++) {
+            resultat += composantes[i] * autre.composantes[i];
+        }
+        return resultat;
+    }
+    public void afficher() {
+        System.out.print("(");
+        for (int i = 0; i < composantes.length; i++) {
+            System.out.print(composantes[i]);
+            if (i < composantes.length - 1) System.out.print(", ");
+        }
+        System.out.println(")");
+    }
+    
+  
+    public static Vecteur somme(Vecteur v1, Vecteur v2) {
+        if (!sontCompatibles(v1, v2)) return null;
+        
+        double[] resultat = new double[v1.composantes.length];
+        for (int i = 0; i < resultat.length; i++) {
+            resultat[i] = v1.composantes[i] + v2.composantes[i];
+        }
+        return new Vecteur(resultat);
     }
 
+    public static Vecteur produit(Vecteur v1, Vecteur v2) {
+        if (!sontCompatibles(v1, v2)) return null;
+        
+        double[] resultat = new double[v1.composantes.length];
+        for (int i = 0; i < resultat.length; i++) {
+            resultat[i] = v1.composantes[i] * v2.composantes[i];
+        }
+        return new Vecteur(resultat);
+    }
+    
+   
+    private static boolean sontCompatibles(Vecteur v1, Vecteur v2) {
+        return v1 != null && v2 != null 
+               && v1.composantes.length == v2.composantes.length;
+    }
+    
+ 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int choix;
-        double a, b, resultat;
 
-        System.out.println("=== Calculatrice Simple ===");
-        System.out.println("1. Addition");
-        System.out.println("2. Soustraction");
-        System.out.println("3. Multiplication");
-        System.out.println("4. Division");
-        System.out.print("Choisissez une opération (1/2/3/4) : ");
-        choix = scanner.nextInt();
+        Vecteur v1 = new Vecteur(new double[]{1.0, 2.0, 3.0});
+        Vecteur v2 = new Vecteur(new double[]{4.0, 5.0, 6.0});
 
-        System.out.print("Entrez le premier nombre : ");
-        a = scanner.nextDouble();
-
-        System.out.print("Entrez le second nombre : ");
-        b = scanner.nextDouble();
-
-        switch (choix) {
-            case 1:
-                resultat = addition(a, b);
-                System.out.println("Résultat : " + resultat);
-                break;
-            case 2:
-                resultat = soustraction(a, b);
-                System.out.println("Résultat : " + resultat);
-                break;
-            case 3:
-                resultat = multiplication(a, b);
-                System.out.println("Résultat : " + resultat);
-                break;
-            case 4:
-                resultat = division(a, b);
-                if (!Double.isNaN(resultat)) {
-                    System.out.println("Résultat : " + resultat);
-                   
-                }
-                break;
-            default:
-                System.out.println("Choix invalide veuillez entrer un seconde nombre non valide !");
-                
+        System.out.print("Vecteur 1: ");
+        v1.afficher();
+        System.out.print("Vecteur 2: ");
+        v2.afficher();
+       
+        System.out.println("\n=== Opérations ===");
+        
+        Vecteur somme = Vecteur.somme(v1, v2);
+        System.out.print("Somme: ");
+        if (somme != null) somme.afficher();
+        else System.out.println("Opération impossible");
+        
+        Vecteur produit = Vecteur.produit(v1, v2);
+        System.out.print("Produit: ");
+        if (produit != null) produit.afficher();
+        else System.out.println("Opération impossible");
+        
+        try {
+            System.out.println("Produit scalaire: " + v1.produitScalaire(v2));
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erreur produit scalaire: " + e.getMessage());
         }
-
-        scanner.close();
     }
 }
